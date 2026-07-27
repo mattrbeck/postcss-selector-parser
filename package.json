@@ -35,10 +35,7 @@
     "prepare": "npm run build",
     "release": "npx npmpub"
   },
-  "dependencies": {
-    "cssesc": "^3.0.0",
-    "util-deprecate": "^1.0.2"
-  },
+  "dependencies": {},
   "license": "MIT",
   "engines": {
     "node": ">=4"

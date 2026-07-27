@@ -31,60 +31,22 @@ const WHITESPACE_EQUIV_TOKENS = {
   [tokens.comment]: true,
 };
 
-function tokenStart(token) {
-  return {
-    line: token[TOKEN.START_LINE],
-    column: token[TOKEN.START_COL],
-  };
-}
-
-function tokenEnd(token) {
-  return {
-    line: token[TOKEN.END_LINE],
-    column: token[TOKEN.END_COL],
-  };
-}
-
-function getSource(startLine, startColumn, endLine, endColumn) {
-  return {
-    start: {
-      line: startLine,
-      column: startColumn,
-    },
-    end: {
-      line: endLine,
-      column: endColumn,
-    },
-  };
-}
-
-function getTokenSource(token) {
-  return getSource(
-    token[TOKEN.START_LINE],
-    token[TOKEN.START_COL],
-    token[TOKEN.END_LINE],
-    token[TOKEN.END_COL],
-  );
-}
-
-function getTokenSourceSpan(startToken, endToken) {
-  if (!startToken) {
-    return undefined;
-  }
-  return getSource(
-    startToken[TOKEN.START_LINE],
-    startToken[TOKEN.START_COL],
-    endToken[TOKEN.END_LINE],
-    endToken[TOKEN.END_COL],
-  );
-}
+const tokenStart = (t) => ({ line: t[1], column: t[2] });
+const tokenEnd = (t) => ({ line: t[3], column: t[4] });
+const getSource = (sl, sc, el, ec) => ({
+  start: { line: sl, column: sc },
+  end: { line: el, column: ec },
+});
+const getTokenSource = (t) => ({
+  start: { line: t[1], column: t[2] },
+  end: { line: t[3], column: t[4] },
+});
+const getTokenSourceSpan = (s, e) =>
+  s ? { start: { line: s[1], column: s[2] }, end: { line: e[3], column: e[4] } } : undefined;
 
 function unescapeProp(node, prop) {
   let value = node[prop];
-  if (typeof value !== "string") {
-    return;
-  }
-  if (value.indexOf("\\") !== -1) {
+  if (typeof value === "string" && value.includes("\\")) {
     ensureObject(node, "raws");
     node[prop] = unesc(value);
     if (node.raws[prop] === undefined) {

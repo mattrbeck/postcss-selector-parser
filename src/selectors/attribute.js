@@ -1,9 +1,20 @@
-import cssesc from "cssesc";
+import cssesc from "../util/cssesc";
 import unesc from "../util/unesc";
 import Namespace from "./namespace";
 import { ATTRIBUTE } from "./types";
 
-const deprecate = require("util-deprecate");
+function deprecate(fn, msg) {
+  let warned = false;
+  return function () {
+    if (!warned) {
+      warned = true;
+      if (typeof console !== "undefined" && console.warn) {
+        console.warn(msg);
+      }
+    }
+    return fn.apply(this, arguments);
+  };
+}
 
 const WRAPPED_IN_QUOTES = /^('|")([^]*)\1$/;
 

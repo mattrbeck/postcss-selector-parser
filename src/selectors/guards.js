@@ -13,41 +13,22 @@ import {
   UNIVERSAL,
 } from "./types";
 
-const IS_TYPE = {
-  [ATTRIBUTE]: true,
-  [CLASS]: true,
-  [COMBINATOR]: true,
-  [COMMENT]: true,
-  [ID]: true,
-  [NESTING]: true,
-  [PSEUDO]: true,
-  [ROOT]: true,
-  [SELECTOR]: true,
-  [STRING]: true,
-  [TAG]: true,
-  [UNIVERSAL]: true,
-};
-
 export function isNode(node) {
-  return typeof node === "object" && IS_TYPE[node.type];
+  return typeof node === "object" && node !== null && !!node.type;
 }
 
-function isNodeType(type, node) {
-  return isNode(node) && node.type === type;
-}
-
-export const isAttribute = isNodeType.bind(null, ATTRIBUTE);
-export const isClassName = isNodeType.bind(null, CLASS);
-export const isCombinator = isNodeType.bind(null, COMBINATOR);
-export const isComment = isNodeType.bind(null, COMMENT);
-export const isIdentifier = isNodeType.bind(null, ID);
-export const isNesting = isNodeType.bind(null, NESTING);
-export const isPseudo = isNodeType.bind(null, PSEUDO);
-export const isRoot = isNodeType.bind(null, ROOT);
-export const isSelector = isNodeType.bind(null, SELECTOR);
-export const isString = isNodeType.bind(null, STRING);
-export const isTag = isNodeType.bind(null, TAG);
-export const isUniversal = isNodeType.bind(null, UNIVERSAL);
+export const isAttribute = (node) => isNode(node) && node.type === ATTRIBUTE;
+export const isClassName = (node) => isNode(node) && node.type === CLASS;
+export const isCombinator = (node) => isNode(node) && node.type === COMBINATOR;
+export const isComment = (node) => isNode(node) && node.type === COMMENT;
+export const isIdentifier = (node) => isNode(node) && node.type === ID;
+export const isNesting = (node) => isNode(node) && node.type === NESTING;
+export const isPseudo = (node) => isNode(node) && node.type === PSEUDO;
+export const isRoot = (node) => isNode(node) && node.type === ROOT;
+export const isSelector = (node) => isNode(node) && node.type === SELECTOR;
+export const isString = (node) => isNode(node) && node.type === STRING;
+export const isTag = (node) => isNode(node) && node.type === TAG;
+export const isUniversal = (node) => isNode(node) && node.type === UNIVERSAL;
 
 export function isPseudoElement(node) {
   return (
@@ -60,6 +41,7 @@ export function isPseudoElement(node) {
       node.value.toLowerCase() === ":first-line")
   );
 }
+
 export function isPseudoClass(node) {
   return isPseudo(node) && !isPseudoElement(node);
 }
