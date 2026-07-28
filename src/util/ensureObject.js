@@ -1,11 +1,9 @@
 export default function ensureObject(obj, ...props) {
-  while (props.length > 0) {
-    const prop = props.shift();
-
+  for (let i = 0; i < props.length; i++) {
+    const prop = props[i];
     if (!obj[prop]) {
       obj[prop] = {};
     }
-
     obj = obj[prop];
   }
 }

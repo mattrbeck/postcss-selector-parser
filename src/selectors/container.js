@@ -2,6 +2,16 @@ import { resolveMaxNestingDepth, MAX_NESTING_DEPTH } from "../util";
 import Node from "./node";
 import * as types from "./types";
 
+// Shared body of the nine `walkX()` methods below, which differ only in the
+// node type they filter on.
+function walkType(container, type, callback) {
+  return container.walk((selector) => {
+    if (selector.type === type) {
+      return callback.call(container, selector);
+    }
+  });
+}
+
 export default class Container extends Node {
   constructor(opts) {
     super(opts);
@@ -222,75 +232,39 @@ export default class Container extends Node {
   }
 
   walkAttributes(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.ATTRIBUTE) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.ATTRIBUTE, callback);
   }
 
   walkClasses(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.CLASS) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.CLASS, callback);
   }
 
   walkCombinators(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.COMBINATOR) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.COMBINATOR, callback);
   }
 
   walkComments(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.COMMENT) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.COMMENT, callback);
   }
 
   walkIds(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.ID) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.ID, callback);
   }
 
   walkNesting(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.NESTING) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.NESTING, callback);
   }
 
   walkPseudos(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.PSEUDO) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.PSEUDO, callback);
   }
 
   walkTags(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.TAG) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.TAG, callback);
   }
 
   walkUniversals(callback) {
-    return this.walk((selector) => {
-      if (selector.type === types.UNIVERSAL) {
-        return callback.call(this, selector);
-      }
-    });
+    return walkType(this, types.UNIVERSAL, callback);
   }
 
   split(callback) {

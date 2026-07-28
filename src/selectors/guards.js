@@ -13,23 +13,25 @@ import {
   UNIVERSAL,
 } from "./types";
 
-const IS_TYPE = {
-  [ATTRIBUTE]: true,
-  [CLASS]: true,
-  [COMBINATOR]: true,
-  [COMMENT]: true,
-  [ID]: true,
-  [NESTING]: true,
-  [PSEUDO]: true,
-  [ROOT]: true,
-  [SELECTOR]: true,
-  [STRING]: true,
-  [TAG]: true,
-  [UNIVERSAL]: true,
-};
+const NODE_TYPES = new Set([
+  ATTRIBUTE,
+  CLASS,
+  COMBINATOR,
+  COMMENT,
+  ID,
+  NESTING,
+  PSEUDO,
+  ROOT,
+  SELECTOR,
+  STRING,
+  TAG,
+  UNIVERSAL,
+]);
 
 export function isNode(node) {
-  return typeof node === "object" && IS_TYPE[node.type];
+  // `typeof null === "object"`, so null has to be excluded explicitly;
+  // previously `isNode(null)` threw rather than returning false.
+  return typeof node === "object" && node !== null && NODE_TYPES.has(node.type);
 }
 
 function isNodeType(type, node) {
