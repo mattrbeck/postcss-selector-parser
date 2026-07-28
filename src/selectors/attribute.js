@@ -1,9 +1,30 @@
-import cssesc from "cssesc";
+import cssesc from "../util/cssesc";
 import unesc from "../util/unesc";
 import Namespace from "./namespace";
 import { ATTRIBUTE } from "./types";
 
-const deprecate = require("util-deprecate");
+/**
+ * Wraps `fn` so that the first call emits `msg` as a deprecation warning.
+ *
+ * Replaces the `util-deprecate` dependency. Like that package, warnings go
+ * through Node's warning channel when there is one — so `--no-deprecation`,
+ * `--throw-deprecation` and `--trace-deprecation` still apply — and fall back
+ * to `console.warn` in the browser.
+ */
+function deprecate(fn, msg) {
+  let warned = false;
+  return function () {
+    if (!warned) {
+      warned = true;
+      if (typeof process !== "undefined" && process.emitWarning) {
+        process.emitWarning(msg, "DeprecationWarning");
+      } else if (typeof console !== "undefined" && console.warn) {
+        console.warn(msg);
+      }
+    }
+    return fn.apply(this, arguments);
+  };
+}
 
 const WRAPPED_IN_QUOTES = /^('|")([^]*)\1$/;
 
